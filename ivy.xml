@@ -1,0 +1,17 @@
+<ivy-module version="2.0">
+    <info organisation="com.diffblue" module="silly"/>
+
+    <configurations>
+        <conf name="compile"  description="Required to compile application"/>
+        <conf name="runtime"  description="Additional run-time dependencies" extends="compile"/>
+        <conf name="test"     description="Required for test only" extends="runtime"/>
+        <conf name="provided" description="Needed for compile, but will be present on the target platform."/>
+    </configurations>
+
+    <dependencies>
+        <dependency org="org.junit.jupiter" name="junit-jupiter" rev="5.8.2" conf="test->default"/>
+        <dependency org="org.mockito" name="mockito-core" rev="4.1.0" conf="test->default"/>
+        <dependency org="org.apache.ant" name="ant-junitlauncher" rev="1.10.13" conf="test->default"/>
+        <dependency org="org.opentest4j" name="opentest4j" rev="1.2.0" conf="test->default"/>
+    </dependencies>
+</ivy-module>
