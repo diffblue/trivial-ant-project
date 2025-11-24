@@ -1,5 +1,12 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="Trivial Ant Project" basedir="." default="main"
-         xmlns:jacoco="antlib:org.jacoco.ant">
+         xmlns:jacoco="antlib:org.jacoco.ant"
+         xmlns:cover="antlib:com.diffblue.buildsystem.cover.ant">
+
+    <taskdef
+            uri="antlib:com.diffblue.buildsystem.cover.ant"
+            resource="com/diffblue/cover/buildsystem/ant/antlib.xml">
+        <classpath path="/path/to/cover-buildsystem-ant.jar"/>
+    </taskdef>
 
     <antversion property="antversion"/>
 
@@ -147,5 +154,36 @@
     <target name="clean-build" depends="clean,jar"/>
 
     <target name="main" depends="clean,run"/>
+
+    <target name="info" depends="compile">
+        <cover:projectModule>
+            <cover:moduleName>${ant.project.name}</cover:moduleName>
+            <cover:version>${antversion}</cover:version>
+            <cover:location location="${basedir}"/>
+
+            <cover:classpath>
+                <path refid="test.classpath"/>
+            </cover:classpath>
+
+            <cover:productionClasses location="${prod.classes.dir}"/>
+            <cover:productionSources location="${prod.src.dir}"/>
+            <cover:testClasses location="${test.classes.dir}"/>
+            <cover:testSources location="${test.src.dir}"/>
+
+            <cover:complianceLevel>${java.target}</cover:complianceLevel>
+            <cover:encoding>${file.encoding}</cover:encoding>
+            <cover:junitReport location="${junit.report.dir}"/>
+
+            <cover:buildDirectory location="${build.dir}"/>
+            <cover:jacocoReport location="${jacoco.report.xml}"/>
+            <cover:jacocoDestFile location="${jacoco.exec.file}"/>
+
+            <cover:jacocoFormats>xml</cover:jacocoFormats>
+
+            <!-- optional, only needed if you have submodules -->
+            <cover:submodules/>
+
+        </cover:projectModule>
+    </target>
 
 </project>
