@@ -39,6 +39,8 @@
 
     <property name="jacoco.report.xml" location="${test.report.dir}/coverage/report.xml"/>
 
+    <property name="pitest.report.dir" location="${test.report.dir}/mutation"/>
+
     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="ivy/org.jacoco.ant-0.8.8.jar"/>
     </taskdef>
@@ -64,6 +66,7 @@
         <ivy:retrieve/>
         <ivy:cachepath pathid="compile.path" conf="compile,provided"/>
         <ivy:cachepath pathid="test.path" conf="test,provided"/>
+        <ivy:cachepath pathid="build.path" conf="build"/>
     </target>
 
     <target name="clean">
@@ -87,6 +90,25 @@
         <pathelement location="${prod.classes.dir}"/>
         <pathelement location="${test.classes.dir}"/>
     </path>
+
+
+    <target name="mutate" depends="resolve,test-compile">
+        <path id="build.classpath">
+            <path refid="build.path"/>
+        </path>
+
+        <taskdef name="pitest" classname="org.pitest.ant.PitestTask">
+            <classpath refid="build.classpath"/>
+        </taskdef>
+
+        <pitest
+                pitClasspath="build.classpath"
+                classPath="test.classpath"
+                targetClasses="io.diffblue.*"
+                targetTests="io.diffblue.*"
+                reportDir="${pitest.report.dir}"
+                sourceDir="${prod.src.dir}"/>
+    </target>
 
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
