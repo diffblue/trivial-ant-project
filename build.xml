@@ -47,16 +47,11 @@
 
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
 
-    <property name="test-pattern" value="**/*.class"/>
+    <property name="test.includes" value="**/*Test.*"/>
+    <property name="test.excludes" value=""/>
 
-    <property name="test-filter" value="include-tests"/>
-    <fileset id="include-tests" dir="${test.classes.dir}">
-        <include name="${test-pattern}"/>
-    </fileset>
-    <fileset id="exclude-tests" dir="${test.classes.dir}">
-        <exclude name="${test-pattern}"/>
-    </fileset>
-
+    <property name="test.includeTags" value=""/>
+    <property name="test.excludeTags" value=""/>
 
     <tstamp>
         <format property="timestamp" pattern="yyMMdd'T'HHmmss"/>
@@ -145,10 +140,10 @@
 
     <target name="test" depends="test-compile">
         <jacoco:agent property="jacocoagent" destfile="${jacoco.exec.file}"/>
-        <junitlauncher>
+        <junitlauncher includeTags="${test.includeTags}" excludeTags="${test.excludeTags}" printsummary="true" haltonfailure="true">
             <classpath refid="test.classpath"/>
             <testclasses>
-                <fileset refid="${test-filter}"/>
+                <fileset dir="${test.classes.dir}" includes="${test.includes}" excludes="${test.excludes}"/>
                 <fork>
                     <jvmarg value="${jacocoagent}"/>
                 </fork>
