@@ -213,7 +213,7 @@ phase:
 
       # To run a single test, apply this option
       named:
-        - -Dtest.includes=**/${DIFFBLUE_TEST_FILE}.java
+        - -Dtest.includes=**/${DIFFBLUE_TEST_FILE}.*
 
   # The coverage phase measures the coverage of the tests. It's executed a number of times with different filters
   # applied (to measure the coverage of all, non-diffblue, and diffblue tests).
@@ -238,7 +238,7 @@ phase:
     goals:
 
       - name: ~
-        goal: coverage-report
+        goal: test
         flags:
           - ${DIFFBLUE_TEST_FILTER}
 
